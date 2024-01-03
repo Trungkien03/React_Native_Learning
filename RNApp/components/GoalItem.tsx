@@ -1,13 +1,27 @@
-import { StyleSheet, Text, View } from 'react-native';
+import React from 'react';
+import {
+    StyleSheet,
+    Text,
+    View,
+    Pressable,
+    GestureResponderEvent
+} from 'react-native';
 
 type GoalItemProps = {
     goal: string;
+    onDeleteGoal: (event: GestureResponderEvent) => void;
 };
 
-const GoalItem = ({ goal }: GoalItemProps) => {
+const GoalItem = ({ goal, onDeleteGoal }: GoalItemProps) => {
     return (
-        <View key={`${goal} + ${Math.random()}`} style={GoalItemStyle.goalItem}>
-            <Text style={GoalItemStyle.goalText}>{goal}</Text>
+        <View style={GoalItemStyle.goalItem}>
+            <Pressable
+                android_ripple={{ color: '#7613d3ddd' }}
+                onPress={onDeleteGoal}
+                style={({ pressed }) => pressed && GoalItemStyle.pressedItem}
+            >
+                <Text style={GoalItemStyle.goalText}>{goal}</Text>
+            </Pressable>
         </View>
     );
 };
@@ -15,13 +29,15 @@ const GoalItem = ({ goal }: GoalItemProps) => {
 const GoalItemStyle = StyleSheet.create({
     goalItem: {
         margin: 8,
-        padding: 8,
         borderRadius: 6,
         backgroundColor: '#5e0acc'
     },
-
+    pressedItem: {
+        opacity: 0.5
+    },
     goalText: {
-        color: 'white'
+        color: 'white',
+        padding: 8
     }
 });
 
