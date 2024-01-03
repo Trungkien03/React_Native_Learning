@@ -39,6 +39,7 @@ const GoalInput = ({
                     <Button
                         title="CANCEL"
                         onPress={() => setIsModalVisible(!isModalVisible)}
+                        color={'red'}
                     />
                 </View>
             </View>
