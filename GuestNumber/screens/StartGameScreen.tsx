@@ -1,21 +1,52 @@
-import { StyleSheet, TextInput, View } from 'react-native';
-import ButtonPrimary from '../components/button/ButtonPrimary';
+import { FC, useState } from 'react';
+import { Alert, StyleSheet, TextInput, View } from 'react-native';
+import ButtonPrimary from '../components/ui/ButtonPrimary';
+import { Colors } from '../constants/Colors';
+import Title from '../components/ui/Title';
 
-const StartGameScreen = () => {
+type StartGameScreenProps = {
+    handleSetUserNumber: (value: number) => void;
+};
+
+const StartGameScreen: FC<StartGameScreenProps> = ({ handleSetUserNumber }) => {
+    const [enteredNumber, setEnteredNumber] = useState('');
+
+    const confirmInputNumber = () => {
+        const chooseNumber = parseInt(enteredNumber);
+        if (isNaN(chooseNumber) || chooseNumber <= 0) {
+            Alert.alert('Invalid Number', 'Number must be between 1 and 99', [
+                {
+                    text: 'OK',
+                    style: 'destructive',
+                    onPress: () => setEnteredNumber('')
+                }
+            ]);
+            return;
+        }
+        handleSetUserNumber(chooseNumber);
+    };
+
     return (
         <View style={StartScreenStyles.inputContainer}>
+            <Title>Guest My Number Game</Title>
             <TextInput
                 style={StartScreenStyles.numberInput}
                 maxLength={2}
                 keyboardType="number-pad"
                 autoCorrect={false}
+                value={enteredNumber}
+                onChangeText={(value) => setEnteredNumber(value)}
             />
             <View style={StartScreenStyles.buttonsContainer}>
                 <View style={StartScreenStyles.buttonContainer}>
-                    <ButtonPrimary>Reset</ButtonPrimary>
+                    <ButtonPrimary onPress={() => setEnteredNumber('')}>
+                        Reset
+                    </ButtonPrimary>
                 </View>
                 <View style={StartScreenStyles.buttonContainer}>
-                    <ButtonPrimary>Confirm</ButtonPrimary>
+                    <ButtonPrimary onPress={confirmInputNumber}>
+                        Confirm
+                    </ButtonPrimary>
                 </View>
             </View>
         </View>
@@ -30,7 +61,7 @@ const StartScreenStyles = StyleSheet.create({
         marginHorizontal: 20,
         padding: 16,
         borderRadius: 20,
-        backgroundColor: '#3f0723',
+        backgroundColor: Colors.brown_red,
         elevation: 20,
         shadowColor: 'black',
         shadowOffset: { width: 0, height: 2 },
@@ -41,9 +72,9 @@ const StartScreenStyles = StyleSheet.create({
         height: 50,
         width: 50,
         fontSize: 32,
-        borderBottomColor: '#ddb52f',
+        borderBottomColor: Colors.Yellow,
         borderBottomWidth: 2,
-        color: '#ddb52f',
+        color: Colors.Yellow,
         marginVertical: 8,
         fontWeight: 'bold',
         textAlign: 'center'
