@@ -3,17 +3,21 @@ import {
     RouteProp,
     useNavigation
 } from '@react-navigation/native';
-import { FC, useContext, useLayoutEffect } from 'react';
+import { FC, useLayoutEffect } from 'react';
 import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
 import IconButton from '../components/IconButton';
 import MealDetail from '../components/MealDetail';
 import ListItem from '../components/mealDetails/ListItem';
 import Subtitle from '../components/mealDetails/Subtitle';
 import { MEALS } from '../data/dummy-data';
 import Meal from '../models/meal';
-import { ActionTypes } from '../store/types/ContextType';
+import { RootState } from '../store/redux/Store';
+import {
+    addFavorite,
+    removeFavorite
+} from '../store/redux/slice/FavoritesSlice';
 import { RootStackParamList } from '../types/app.types';
-import { FavoritesContext } from '../store/context/FavoritesContext';
 
 type MealDetailScreenProps = {
     route: RouteProp<RootStackParamList, 'MealDetail'>;
@@ -21,9 +25,12 @@ type MealDetailScreenProps = {
 
 const MealDetailScreen: FC<MealDetailScreenProps> = ({ route }) => {
     const mealId = route.params.mealId;
-    const { state, dispatch } = useContext(FavoritesContext);
+    const dispatch = useDispatch();
+    const favoriteMealsId = useSelector(
+        (state: RootState) => state.favoriteMeals.ids
+    );
 
-    const mealIsFavorite = state.ids.includes(mealId);
+    const mealIsFavorite = favoriteMealsId.includes(mealId);
 
     const navigation =
         useNavigation<NavigationProp<RootStackParamList, 'MealDetail'>>();
@@ -31,15 +38,9 @@ const MealDetailScreen: FC<MealDetailScreenProps> = ({ route }) => {
 
     const changeFavoriteMealHandler = () => {
         if (mealIsFavorite) {
-            dispatch({
-                type: ActionTypes.REMOVE_FAVORITE,
-                payload: mealId
-            });
+            dispatch(removeFavorite({ id: mealId }));
         } else {
-            dispatch({
-                type: ActionTypes.ADD_FAVORITE,
-                payload: mealId
-            });
+            dispatch(addFavorite({ id: mealId }));
         }
     };
 
@@ -54,7 +55,7 @@ const MealDetailScreen: FC<MealDetailScreenProps> = ({ route }) => {
                 />
             )
         });
-    }, [state.ids]);
+    }, [favoriteMealsId]);
 
     return (
         <View>

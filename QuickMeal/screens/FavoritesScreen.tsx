@@ -1,10 +1,15 @@
+import { useSelector } from 'react-redux';
 import MealList from '../components/mealList/MealList';
 import { MEALS } from '../data/dummy-data';
-import useFavoriteMealContext from '../hooks/useFavoriteMealContext';
+import { RootState } from '../store/redux/Store';
 
 const FavoritesScreen = () => {
-    const { state } = useFavoriteMealContext();
-    const favoriteMeals = MEALS.filter((meal) => state.ids.includes(meal.id));
+    const favoriteMealIds = useSelector(
+        (state: RootState) => state.favoriteMeals.ids
+    );
+    const favoriteMeals = MEALS.filter((meal) =>
+        favoriteMealIds.includes(meal.id)
+    );
     return <MealList displayMeals={favoriteMeals} />;
 };
 
