@@ -9,6 +9,7 @@ export type RootStackParamList = {
 export type RootDrawerParamList = {
     MealsCategories: undefined;
     HomeScreen: undefined;
+    MealFavorites: undefined;
 };
 
 export type CategoriesScreenNavigationProps =

@@ -1,3 +1,5 @@
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { FC } from 'react';
 import {
     Image,
     Platform,
@@ -6,19 +8,16 @@ import {
     Text,
     View
 } from 'react-native';
-import Meal from '../models/meal';
-import { FC } from 'react';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { RootStackParamList } from '../types/app.types';
-import MealDetail from './MealDetail';
+import Meal from '../../models/meal';
+import { RootStackParamList } from '../../types/app.types';
+import MealDetail from '../MealDetail';
 
 type MealItemProps = {
     itemData: Meal;
 };
 
 const MealItem: FC<MealItemProps> = ({ itemData }) => {
-    const { imageUrl, title, complexity, duration, affordability, id } =
-        itemData;
+    const { imageUrl, title, id } = itemData;
     const navigation =
         useNavigation<NavigationProp<RootStackParamList, 'MealsOverview'>>();
     const selectMealHandler = () => {

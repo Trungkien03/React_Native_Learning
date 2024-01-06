@@ -3,22 +3,17 @@ import {
     RouteProp,
     useNavigation
 } from '@react-navigation/native';
-import { FC, useLayoutEffect } from 'react';
-import {
-    Button,
-    Image,
-    ScrollView,
-    StyleSheet,
-    Text,
-    View
-} from 'react-native';
+import { FC, useContext, useLayoutEffect } from 'react';
+import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
+import IconButton from '../components/IconButton';
 import MealDetail from '../components/MealDetail';
 import ListItem from '../components/mealDetails/ListItem';
 import Subtitle from '../components/mealDetails/Subtitle';
 import { MEALS } from '../data/dummy-data';
 import Meal from '../models/meal';
+import { ActionTypes } from '../store/types/ContextType';
 import { RootStackParamList } from '../types/app.types';
-import IconButton from '../components/IconButton';
+import { FavoritesContext } from '../store/context/FavoritesContext';
 
 type MealDetailScreenProps = {
     route: RouteProp<RootStackParamList, 'MealDetail'>;
@@ -26,22 +21,40 @@ type MealDetailScreenProps = {
 
 const MealDetailScreen: FC<MealDetailScreenProps> = ({ route }) => {
     const mealId = route.params.mealId;
+    const { state, dispatch } = useContext(FavoritesContext);
+
+    const mealIsFavorite = state.ids.includes(mealId);
+
     const navigation =
         useNavigation<NavigationProp<RootStackParamList, 'MealDetail'>>();
     const selectedMeal = MEALS.find((item) => item.id === mealId);
+
+    const changeFavoriteMealHandler = () => {
+        if (mealIsFavorite) {
+            dispatch({
+                type: ActionTypes.REMOVE_FAVORITE,
+                payload: mealId
+            });
+        } else {
+            dispatch({
+                type: ActionTypes.ADD_FAVORITE,
+                payload: mealId
+            });
+        }
+    };
 
     useLayoutEffect(() => {
         navigation.setOptions({
             title: selectedMeal?.title,
             headerRight: () => (
                 <IconButton
-                    iconName="mail"
+                    iconName={mealIsFavorite ? 'star' : 'star-outline'}
                     color="white"
-                    onTap={() => console.log('2')}
+                    onTap={changeFavoriteMealHandler}
                 />
             )
         });
-    }, []);
+    }, [state.ids]);
 
     return (
         <View>

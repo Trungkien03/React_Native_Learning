@@ -4,7 +4,7 @@ import { FC } from 'react';
 
 type MealDetailProps = {
     meal: Meal;
-    textStyle: {};
+    textStyle?: {};
 };
 
 const MealDetail: FC<MealDetailProps> = ({ meal, textStyle }) => {

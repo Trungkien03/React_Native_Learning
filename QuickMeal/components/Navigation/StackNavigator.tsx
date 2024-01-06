@@ -14,7 +14,7 @@ const StackNavigator = () => {
                 headerBackTitle: 'Back',
                 headerStyle: { backgroundColor: '#553737' },
                 headerTintColor: 'white',
-                contentStyle: { backgroundColor: '#3f2f25' }
+                contentStyle: { backgroundColor: '#434343' }
             }}
         >
             <Stack.Screen
