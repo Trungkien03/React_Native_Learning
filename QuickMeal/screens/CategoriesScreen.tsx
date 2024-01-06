@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FlatList } from 'react-native';
+import { FlatList, View } from 'react-native';
 import CategoryGridTitle from '../components/CategoryGridTitle';
 import { CATEGORIES } from '../data/dummy-data';
 import Category from '../models/category';

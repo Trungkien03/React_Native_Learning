@@ -3,14 +3,22 @@ import {
     RouteProp,
     useNavigation
 } from '@react-navigation/native';
-import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { RootStackParamList } from '../types/app.types';
-import { FC, useEffect } from 'react';
-import { MEALS } from '../data/dummy-data';
+import { FC, useLayoutEffect } from 'react';
+import {
+    Button,
+    Image,
+    ScrollView,
+    StyleSheet,
+    Text,
+    View
+} from 'react-native';
 import MealDetail from '../components/MealDetail';
-import Meal from '../models/meal';
-import Subtitle from '../components/mealDetails/Subtitle';
 import ListItem from '../components/mealDetails/ListItem';
+import Subtitle from '../components/mealDetails/Subtitle';
+import { MEALS } from '../data/dummy-data';
+import Meal from '../models/meal';
+import { RootStackParamList } from '../types/app.types';
+import IconButton from '../components/IconButton';
 
 type MealDetailScreenProps = {
     route: RouteProp<RootStackParamList, 'MealDetail'>;
@@ -21,9 +29,20 @@ const MealDetailScreen: FC<MealDetailScreenProps> = ({ route }) => {
     const navigation =
         useNavigation<NavigationProp<RootStackParamList, 'MealDetail'>>();
     const selectedMeal = MEALS.find((item) => item.id === mealId);
-    useEffect(() => {
-        navigation.setOptions({ title: selectedMeal?.title });
+
+    useLayoutEffect(() => {
+        navigation.setOptions({
+            title: selectedMeal?.title,
+            headerRight: () => (
+                <IconButton
+                    iconName="mail"
+                    color="white"
+                    onTap={() => console.log('2')}
+                />
+            )
+        });
     }, []);
+
     return (
         <View>
             <ScrollView style={styles.rootContainer}>
