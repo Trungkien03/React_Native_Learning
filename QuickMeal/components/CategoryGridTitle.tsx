@@ -1,12 +1,24 @@
+import { useNavigation } from '@react-navigation/native';
 import { FC } from 'react';
 import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
+import { CategoriesScreenNavigationProps } from '../types/app.types';
 
 type CategoryGridTitleProps = {
     title: string;
     color: string;
+    id: string;
 };
 
-const CategoryGridTitle: FC<CategoryGridTitleProps> = ({ color, title }) => {
+const CategoryGridTitle: FC<CategoryGridTitleProps> = ({
+    color,
+    title,
+    id
+}) => {
+    const navigation = useNavigation<CategoriesScreenNavigationProps>();
+
+    const handlerOnPress = () => {
+        navigation.navigate('MealsOverview', { categoryId: id });
+    };
     return (
         <View style={[styles.gridItem, { backgroundColor: color }]}>
             <Pressable
@@ -15,6 +27,7 @@ const CategoryGridTitle: FC<CategoryGridTitleProps> = ({ color, title }) => {
                     styles.button,
                     pressed ? styles.buttonPressed : null
                 ]}
+                onPress={handlerOnPress}
             >
                 <View style={styles.innerContainer}>
                     <Text style={styles.title}>{title}</Text>

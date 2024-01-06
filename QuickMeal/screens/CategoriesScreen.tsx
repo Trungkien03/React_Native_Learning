@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FlatList, View } from 'react-native';
+import { FlatList } from 'react-native';
 import CategoryGridTitle from '../components/CategoryGridTitle';
 import { CATEGORIES } from '../data/dummy-data';
 import Category from '../models/category';
@@ -12,6 +12,7 @@ const CategoriesScreen = () => {
             <CategoryGridTitle
                 title={itemData.item.title}
                 color={itemData.item.color}
+                id={itemData.item.id}
             />
         );
     };
