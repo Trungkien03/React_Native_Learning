@@ -1,14 +1,7 @@
-import ExpensesOutput, {
-    DUMMY_EXPENSES
-} from '../components/Expenses/ExpensesOutput';
+import ExpensesOutput from '../components/Expenses/ExpensesOutput';
 
 const RecentExpense = () => {
-    return (
-        <ExpensesOutput
-            expensesPeriod="Last 7 Days"
-            expenses={DUMMY_EXPENSES}
-        />
-    );
+    return <ExpensesOutput expensesPeriod="Last 7 Days" />;
 };
 
 export default RecentExpense;

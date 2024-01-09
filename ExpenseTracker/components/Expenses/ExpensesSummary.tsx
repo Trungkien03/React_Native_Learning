@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { IExpense } from './ExpensesOutput';
 import { GlobalStyles } from '../../constants/CommonConstant';
+import { IExpense } from '../../types/CommonTypes';
 
 interface ExpensesSummaryProps {
     expenses: IExpense[];

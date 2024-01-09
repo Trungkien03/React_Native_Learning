@@ -1,18 +1,14 @@
 import { FlatList, Text, View } from 'react-native';
 import { IExpense } from './ExpensesOutput';
 import { FC } from 'react';
+import ExpenseItem from './ExpenseItem';
 
 type ExpensesListProps = {
     expenses: IExpense[];
 };
 
 const renderExpenseItem = ({ item }: { item: IExpense }) => {
-    return (
-        <View>
-            <Text>{item.description}</Text>
-            <Text>{item.amount}</Text>
-        </View>
-    );
+    return <ExpenseItem expense={item} />;
 };
 
 const ExpensesList: FC<ExpensesListProps> = ({ expenses }) => {
