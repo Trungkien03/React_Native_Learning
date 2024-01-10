@@ -4,13 +4,17 @@ import { GlobalStyles } from '../../constants/CommonConstant';
 import { ExpensesContext } from '../../store/ExpensesContext';
 import ExpensesList from './ExpensesList';
 import ExpensesSummary from './ExpensesSummary';
+import { IExpense } from '../../types/CommonTypes';
 
 type ExpensesOutputProps = {
+    expenses: IExpense[];
     expensesPeriod: string;
 };
 
-const ExpensesOutput: FC<ExpensesOutputProps> = ({ expensesPeriod }) => {
-    const { expenses } = useContext(ExpensesContext);
+const ExpensesOutput: FC<ExpensesOutputProps> = ({
+    expensesPeriod,
+    expenses
+}) => {
     return (
         <View style={styles.container}>
             <ExpensesSummary expenses={expenses} periodName={expensesPeriod} />

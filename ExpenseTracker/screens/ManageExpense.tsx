@@ -1,10 +1,11 @@
 import { NavigationProp, RouteProp } from '@react-navigation/native';
-import { FC, useLayoutEffect } from 'react';
+import { FC, useContext, useLayoutEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { RootStackParamList } from '../types/CommonTypes';
+import { IExpense, RootStackParamList } from '../types/CommonTypes';
 import IconButton from '../components/UI/IconButton';
 import { GlobalStyles } from '../constants/CommonConstant';
 import Button from '../components/UI/Button';
+import { ExpensesContext } from '../store/ExpensesContext';
 
 interface ManageExpenseProps {
     route: RouteProp<RootStackParamList>;
@@ -12,6 +13,8 @@ interface ManageExpenseProps {
 }
 
 const ManageExpense: FC<ManageExpenseProps> = ({ route, navigation }) => {
+    const { deleteExpense, addExpense, updateExpense } =
+        useContext(ExpensesContext);
     const editedExpenseId = route.params?.expenseId;
     const isEditing = !!editedExpenseId;
 
@@ -22,6 +25,7 @@ const ManageExpense: FC<ManageExpenseProps> = ({ route, navigation }) => {
     }, [isEditing, navigation]);
 
     const deleteExpenseHandler = () => {
+        deleteExpense(editedExpenseId || '');
         navigation.goBack();
     };
 
@@ -30,6 +34,20 @@ const ManageExpense: FC<ManageExpenseProps> = ({ route, navigation }) => {
     };
 
     const confirmHandler = () => {
+        if (isEditing) {
+            updateExpense('e6', {
+                description: 'Some bananas',
+                amount: 5.99,
+                date: new Date('2024-01-05')
+            } as IExpense);
+        } else {
+            addExpense({
+                id: 'e100',
+                description: 'Some bananas',
+                amount: 5.99,
+                date: new Date('2024-01-08')
+            });
+        }
         navigation.goBack();
     };
 

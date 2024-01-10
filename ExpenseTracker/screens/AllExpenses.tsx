@@ -1,10 +1,15 @@
 import { useContext } from 'react';
-import ExpensesList from '../components/Expenses/ExpensesList';
 import { ExpensesContext } from '../store/ExpensesContext';
+import ExpensesOutput from '../components/Expenses/ExpensesOutput';
 
 const AllExpenses = () => {
     const { expenses } = useContext(ExpensesContext);
-    return <ExpensesList expenses={expenses} />;
+    return (
+        <ExpensesOutput
+            expenses={expenses || []}
+            expensesPeriod="All Expenses"
+        />
+    );
 };
 
 export default AllExpenses;

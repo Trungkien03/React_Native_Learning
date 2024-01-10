@@ -1,7 +1,7 @@
-import { FlatList, Text, View } from 'react-native';
-import { IExpense } from './ExpensesOutput';
 import { FC } from 'react';
+import { FlatList } from 'react-native';
 import ExpenseItem from './ExpenseItem';
+import { IExpense } from '../../types/CommonTypes';
 
 type ExpensesListProps = {
     expenses: IExpense[];
@@ -15,7 +15,7 @@ const ExpensesList: FC<ExpensesListProps> = ({ expenses }) => {
     return (
         <FlatList
             data={expenses}
-            keyExtractor={(item) => item.id.toString()}
+            keyExtractor={(item) => item.id}
             renderItem={renderExpenseItem}
         />
     );
