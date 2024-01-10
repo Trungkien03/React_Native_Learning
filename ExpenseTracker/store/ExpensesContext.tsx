@@ -6,7 +6,6 @@ import {
     initialState,
     IExpense
 } from '../types/CommonTypes';
-import { DUMMY_EXPENSES } from '../data/Expenses';
 
 export const ExpensesContext = createContext(initialState);
 
@@ -40,17 +39,17 @@ const expensesReducer = (
                 ...state,
                 expenses: filteredExpenses
             };
+        case STATE_VALUE.SET:
+            return { ...state, expenses: action.payload };
         default:
             return state;
     }
 };
 
 const ExpensesContextProvider = ({ children }: { children: ReactNode }) => {
-    const [state, dispatch] = useReducer(expensesReducer, {
-        expenses: DUMMY_EXPENSES
-    } as ExpensesContextType);
+    const [state, dispatch] = useReducer(expensesReducer, initialState);
 
-    const AddExpense = (expense: IExpense) =>
+    const addExpense = (expense: IExpense) =>
         dispatch({ type: STATE_VALUE.ADD_EXPENSE, payload: expense });
 
     const updateExpense = (id: string, expense: IExpense) =>
@@ -62,11 +61,15 @@ const ExpensesContextProvider = ({ children }: { children: ReactNode }) => {
     const deleteExpense = (id: string) =>
         dispatch({ type: STATE_VALUE.DELETE_EXPENSE, payload: { id } });
 
-    const value = {
+    const setExpenses = (expenses: IExpense[]) =>
+        dispatch({ type: STATE_VALUE.SET, payload: expenses });
+
+    const value: ExpensesContextType = {
         expenses: state.expenses,
-        addExpense: AddExpense,
+        addExpense: addExpense,
         updateExpense: updateExpense,
-        deleteExpense: deleteExpense
+        deleteExpense: deleteExpense,
+        setExpenses: setExpenses // Include setExpenses in the value object
     };
 
     return (

@@ -19,19 +19,22 @@ export interface IExpense {
 
 export interface ExpensesContextType {
     expenses: IExpense[];
+    setExpenses: (expenses: IExpense[]) => void;
     addExpense: (expense: IExpense) => void;
     deleteExpense: (id: string) => void;
     updateExpense: (id: string, expense: IExpense) => void;
 }
 
 export const initialState: ExpensesContextType = {
-    expenses: DUMMY_EXPENSES,
+    expenses: [],
+    setExpenses: () => {},
     addExpense: () => {},
     deleteExpense: () => {},
     updateExpense: () => {}
 };
 
 export enum STATE_VALUE {
+    SET = 'SET_EXPENSE',
     ADD_EXPENSE = 'ADD_EXPENSE',
     UPDATE_EXPENSE = 'UPDATE_EXPENSE',
     DELETE_EXPENSE = 'DELETE_EXPENSE'
@@ -52,7 +55,13 @@ export type DeleteExpenseType = {
     payload: { id: string };
 };
 
+export type SetExpenseType = {
+    type: STATE_VALUE.SET;
+    payload: IExpense[];
+};
+
 export type ActionProps =
     | AddExpenseType
     | UpdateExpenseType
-    | DeleteExpenseType;
+    | DeleteExpenseType
+    | SetExpenseType;

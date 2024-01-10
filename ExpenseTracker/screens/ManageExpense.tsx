@@ -11,6 +11,7 @@ import IconButton from '../components/UI/IconButton';
 import { GlobalStyles } from '../constants/CommonConstant';
 import { ExpensesContext } from '../store/ExpensesContext';
 import { IExpense, RootStackParamList } from '../types/CommonTypes';
+import { storeExpense } from '../components/utils/Http';
 
 interface ManageExpenseProps {
     route: RouteProp<RootStackParamList>;
@@ -43,6 +44,7 @@ const ManageExpense: FC<ManageExpenseProps> = ({ route, navigation }) => {
         if (isEditing) {
             updateExpense(editedExpenseId, expenseData);
         } else {
+            storeExpense(expenseData);
             addExpense(expenseData);
         }
         navigation.goBack();
