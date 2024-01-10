@@ -1,11 +1,12 @@
-import { StyleSheet, Text, View } from 'react-native';
-import Input from './Input';
 import { FC, useState } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import { IExpense } from '../../types/CommonTypes';
 import Button from '../UI/Button';
+import Input from './Input';
 
 interface ExpenseFormProps {
     onCancel: () => void;
-    onSubmit: () => void;
+    onSubmit: (item: IExpense) => void;
     submitButtonLabel: string;
 }
 
@@ -19,6 +20,7 @@ const ExpenseForm: FC<ExpenseFormProps> = ({
         date: '',
         description: ''
     });
+
     const amountChangeHandler = (
         inputIdentifier: keyof typeof inputValues,
         enteredValue: string
@@ -29,6 +31,17 @@ const ExpenseForm: FC<ExpenseFormProps> = ({
                 [inputIdentifier]: enteredValue
             };
         });
+    };
+
+    const submitHandler = () => {
+        const expenseData: IExpense = {
+            id: new Date().getDate.toString(),
+            amount: +inputValues.amount,
+            date: new Date(inputValues.date),
+            description: inputValues.description
+        };
+
+        onSubmit(expenseData);
     };
     return (
         <View style={styles.formContainer}>
@@ -70,7 +83,7 @@ const ExpenseForm: FC<ExpenseFormProps> = ({
                 <Button mode="flat" onPress={onCancel} style={styles.button}>
                     Cancel
                 </Button>
-                <Button onPress={onSubmit} style={styles.button}>
+                <Button onPress={submitHandler} style={styles.button}>
                     {submitButtonLabel}
                 </Button>
             </View>

@@ -1,6 +1,11 @@
 import { NavigationProp, RouteProp } from '@react-navigation/native';
 import { FC, useContext, useLayoutEffect } from 'react';
-import { StyleSheet, View } from 'react-native';
+import {
+    Keyboard,
+    StyleSheet,
+    TouchableWithoutFeedback,
+    View
+} from 'react-native';
 import ExpenseForm from '../components/ManageExpense/ExpenseForm';
 import IconButton from '../components/UI/IconButton';
 import { GlobalStyles } from '../constants/CommonConstant';
@@ -33,43 +38,36 @@ const ManageExpense: FC<ManageExpenseProps> = ({ route, navigation }) => {
         navigation.goBack();
     };
 
-    const confirmHandler = () => {
+    const confirmHandler = (expenseData: IExpense) => {
         if (isEditing) {
-            updateExpense('e6', {
-                description: 'Some bananas',
-                amount: 5.99,
-                date: new Date('2024-01-05')
-            } as IExpense);
+            updateExpense(editedExpenseId, expenseData);
         } else {
-            addExpense({
-                id: 'e100',
-                description: 'Some bananas',
-                amount: 5.99,
-                date: new Date('2024-01-08')
-            });
+            addExpense(expenseData);
         }
         navigation.goBack();
     };
 
     return (
-        <View style={styles.container}>
-            <ExpenseForm
-                onCancel={cancelHandler}
-                onSubmit={confirmHandler}
-                submitButtonLabel={isEditing ? 'Update' : 'Add'}
-            />
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+            <View style={styles.container}>
+                <ExpenseForm
+                    onCancel={cancelHandler}
+                    onSubmit={confirmHandler}
+                    submitButtonLabel={isEditing ? 'Update' : 'Add'}
+                />
 
-            {isEditing && (
-                <View style={styles.deleteContainer}>
-                    <IconButton
-                        icon="trash"
-                        color={GlobalStyles.colors.error500}
-                        size={24}
-                        onPress={deleteExpenseHandler}
-                    />
-                </View>
-            )}
-        </View>
+                {isEditing && (
+                    <View style={styles.deleteContainer}>
+                        <IconButton
+                            icon="trash"
+                            color={GlobalStyles.colors.error500}
+                            size={24}
+                            onPress={deleteExpenseHandler}
+                        />
+                    </View>
+                )}
+            </View>
+        </TouchableWithoutFeedback>
     );
 };
 
