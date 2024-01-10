@@ -1,10 +1,9 @@
-import { FC, useContext } from 'react';
+import { FC } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { GlobalStyles } from '../../constants/CommonConstant';
-import { ExpensesContext } from '../../store/ExpensesContext';
+import { IExpense } from '../../types/CommonTypes';
 import ExpensesList from './ExpensesList';
 import ExpensesSummary from './ExpensesSummary';
-import { IExpense } from '../../types/CommonTypes';
 
 type ExpensesOutputProps = {
     expenses: IExpense[];

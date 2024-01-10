@@ -6,6 +6,7 @@ import IconButton from '../components/UI/IconButton';
 import { GlobalStyles } from '../constants/CommonConstant';
 import Button from '../components/UI/Button';
 import { ExpensesContext } from '../store/ExpensesContext';
+import ExpenseForm from '../components/ManageExpense/ExpenseForm';
 
 interface ManageExpenseProps {
     route: RouteProp<RootStackParamList>;
@@ -53,6 +54,7 @@ const ManageExpense: FC<ManageExpenseProps> = ({ route, navigation }) => {
 
     return (
         <View style={styles.container}>
+            <ExpenseForm />
             <View style={styles.buttons}>
                 <Button
                     mode="flat"
