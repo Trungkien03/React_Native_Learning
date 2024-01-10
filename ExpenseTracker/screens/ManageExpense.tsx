@@ -18,9 +18,10 @@ interface ManageExpenseProps {
 }
 
 const ManageExpense: FC<ManageExpenseProps> = ({ route, navigation }) => {
-    const { deleteExpense, addExpense, updateExpense } =
+    const { deleteExpense, addExpense, updateExpense, expenses } =
         useContext(ExpensesContext);
     const editedExpenseId = route.params?.expenseId;
+    const fountItem = expenses.find((item) => item.id === editedExpenseId);
     const isEditing = !!editedExpenseId;
 
     useLayoutEffect(() => {
@@ -51,6 +52,7 @@ const ManageExpense: FC<ManageExpenseProps> = ({ route, navigation }) => {
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
             <View style={styles.container}>
                 <ExpenseForm
+                    fountItem={fountItem}
                     onCancel={cancelHandler}
                     onSubmit={confirmHandler}
                     submitButtonLabel={isEditing ? 'Update' : 'Add'}

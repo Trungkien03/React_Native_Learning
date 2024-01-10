@@ -2,9 +2,11 @@ import { FC, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { IExpense } from '../../types/CommonTypes';
 import Button from '../UI/Button';
+import { getFormattedDate } from '../utils/Date';
 import Input from './Input';
 
 interface ExpenseFormProps {
+    fountItem?: IExpense;
     onCancel: () => void;
     onSubmit: (item: IExpense) => void;
     submitButtonLabel: string;
@@ -13,12 +15,15 @@ interface ExpenseFormProps {
 const ExpenseForm: FC<ExpenseFormProps> = ({
     onCancel,
     onSubmit,
-    submitButtonLabel
+    submitButtonLabel,
+    fountItem
 }) => {
     const [inputValues, setInputValues] = useState({
-        amount: '',
-        date: '',
-        description: ''
+        amount: String(fountItem?.amount || ''),
+        date: getFormattedDate(
+            fountItem ? fountItem.date : new Date(Date.now())
+        ),
+        description: fountItem?.description
     });
 
     const amountChangeHandler = (
@@ -38,7 +43,7 @@ const ExpenseForm: FC<ExpenseFormProps> = ({
             id: new Date().getDate.toString(),
             amount: +inputValues.amount,
             date: new Date(inputValues.date),
-            description: inputValues.description
+            description: inputValues.description || ''
         };
 
         onSubmit(expenseData);
