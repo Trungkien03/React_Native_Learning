@@ -25,7 +25,7 @@ const ExpensesList: FC<ExpensesListProps> = ({ expenses }) => {
     return (
         <FlatList
             data={expenses}
-            keyExtractor={(item) => item.id}
+            keyExtractor={(item) => item.id + Math.random()}
             renderItem={renderExpenseItem}
         />
     );

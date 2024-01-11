@@ -40,7 +40,7 @@ const ExpenseForm: FC<ExpenseFormProps> = ({
 
     const submitHandler = () => {
         const expenseData: IExpense = {
-            id: new Date().getDate.toString(),
+            id: Math.random().toString() + Date.now().toString(),
             amount: +inputValues.amount,
             date: new Date(inputValues.date),
             description: inputValues.description || ''

@@ -4,8 +4,14 @@ import { IExpense } from '../../types/CommonTypes';
 const BACKEND_BASEURL =
     'https://react-native-course-4171b-default-rtdb.asia-southeast1.firebasedatabase.app';
 
-export const storeExpense = (expenseData: IExpense) => {
-    axios.post(BACKEND_BASEURL + '/expenses.json', expenseData);
+export const storeExpense = async (expenseData: IExpense) => {
+    const response = await axios.post(
+        BACKEND_BASEURL + '/expenses.json',
+        expenseData
+    );
+    const id = response.data.name;
+
+    return id;
 };
 
 export const fetchExpenses = async () => {
@@ -21,4 +27,15 @@ export const fetchExpenses = async () => {
         expenses.push(expenseObj);
     }
     return expenses;
+};
+
+export const updateExpenseService = async (
+    id: string,
+    expenseData: IExpense
+) => {
+    return axios.put(BACKEND_BASEURL + `/expenses/${id}.json`, expenseData);
+};
+
+export const deleteExpese = async (id: string) => {
+    return axios.delete(BACKEND_BASEURL + `/expenses/${id}.json`);
 };

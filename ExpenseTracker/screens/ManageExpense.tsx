@@ -10,8 +10,16 @@ import ExpenseForm from '../components/ManageExpense/ExpenseForm';
 import IconButton from '../components/UI/IconButton';
 import { GlobalStyles } from '../constants/CommonConstant';
 import { ExpensesContext } from '../store/ExpensesContext';
-import { IExpense, RootStackParamList } from '../types/CommonTypes';
-import { storeExpense } from '../components/utils/Http';
+import {
+    IExpense,
+    RootStackParamList,
+    STATE_VALUE
+} from '../types/CommonTypes';
+import {
+    deleteExpese,
+    storeExpense,
+    updateExpenseService
+} from '../components/utils/Http';
 
 interface ManageExpenseProps {
     route: RouteProp<RootStackParamList>;
@@ -19,8 +27,8 @@ interface ManageExpenseProps {
 }
 
 const ManageExpense: FC<ManageExpenseProps> = ({ route, navigation }) => {
-    const { deleteExpense, addExpense, updateExpense, expenses } =
-        useContext(ExpensesContext);
+    const { state, dispatch } = useContext(ExpensesContext);
+    const { expenses } = state;
     const editedExpenseId = route.params?.expenseId;
     const fountItem = expenses.find((item) => item.id === editedExpenseId);
     const isEditing = !!editedExpenseId;
@@ -31,8 +39,14 @@ const ManageExpense: FC<ManageExpenseProps> = ({ route, navigation }) => {
         });
     }, [isEditing, navigation]);
 
-    const deleteExpenseHandler = () => {
-        deleteExpense(editedExpenseId || '');
+    const deleteExpenseHandler = async () => {
+        dispatch({ type: STATE_VALUE.SET_LOADING, payload: true });
+        await deleteExpese(editedExpenseId || '');
+        dispatch({
+            type: STATE_VALUE.DELETE_EXPENSE,
+            payload: { id: editedExpenseId || '' }
+        });
+        dispatch({ type: STATE_VALUE.SET_LOADING, payload: false });
         navigation.goBack();
     };
 
@@ -40,13 +54,23 @@ const ManageExpense: FC<ManageExpenseProps> = ({ route, navigation }) => {
         navigation.goBack();
     };
 
-    const confirmHandler = (expenseData: IExpense) => {
+    const confirmHandler = async (expenseData: IExpense) => {
+        dispatch({ type: STATE_VALUE.SET_LOADING, payload: true });
         if (isEditing) {
-            updateExpense(editedExpenseId, expenseData);
+            await updateExpenseService(editedExpenseId, expenseData);
+            dispatch({
+                type: STATE_VALUE.UPDATE_EXPENSE,
+                payload: { id: editedExpenseId, expense: expenseData }
+            });
         } else {
-            storeExpense(expenseData);
-            addExpense(expenseData);
+            const id = await storeExpense(expenseData);
+
+            dispatch({
+                type: STATE_VALUE.ADD_EXPENSE,
+                payload: { ...expenseData, id }
+            });
         }
+        dispatch({ type: STATE_VALUE.SET_LOADING, payload: false });
         navigation.goBack();
     };
 

@@ -1,3 +1,4 @@
+import { Dispatch } from 'react';
 import { DUMMY_EXPENSES } from '../data/Expenses';
 
 export type RootStackParamList = {
@@ -18,22 +19,25 @@ export interface IExpense {
 }
 
 export interface ExpensesContextType {
+    error: string;
+    isLoading: boolean;
     expenses: IExpense[];
-    setExpenses: (expenses: IExpense[]) => void;
-    addExpense: (expense: IExpense) => void;
-    deleteExpense: (id: string) => void;
-    updateExpense: (id: string, expense: IExpense) => void;
+}
+
+export interface IContextExpenses {
+    state: ExpensesContextType;
+    dispatch: Dispatch<ActionProps>;
 }
 
 export const initialState: ExpensesContextType = {
-    expenses: [],
-    setExpenses: () => {},
-    addExpense: () => {},
-    deleteExpense: () => {},
-    updateExpense: () => {}
+    error: '',
+    isLoading: false,
+    expenses: []
 };
 
 export enum STATE_VALUE {
+    SET_ERROR = 'SET_ERROR',
+    SET_LOADING = 'SET_LOADING',
     SET = 'SET_EXPENSE',
     ADD_EXPENSE = 'ADD_EXPENSE',
     UPDATE_EXPENSE = 'UPDATE_EXPENSE',
@@ -60,8 +64,20 @@ export type SetExpenseType = {
     payload: IExpense[];
 };
 
+export type SetIsLoading = {
+    type: STATE_VALUE.SET_LOADING;
+    payload: boolean;
+};
+
+export type SetError = {
+    type: STATE_VALUE.SET_ERROR;
+    payload: string;
+};
+
 export type ActionProps =
     | AddExpenseType
     | UpdateExpenseType
     | DeleteExpenseType
-    | SetExpenseType;
+    | SetExpenseType
+    | SetIsLoading
+    | SetError;

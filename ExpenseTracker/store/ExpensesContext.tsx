@@ -1,13 +1,16 @@
 import React, { ReactNode, createContext, useReducer } from 'react';
 import {
-    ExpensesContextType,
     ActionProps,
+    ExpensesContextType,
+    IContextExpenses,
     STATE_VALUE,
-    initialState,
-    IExpense
+    initialState
 } from '../types/CommonTypes';
 
-export const ExpensesContext = createContext(initialState);
+export const ExpensesContext = createContext<IContextExpenses>({
+    state: initialState,
+    dispatch: () => {}
+});
 
 const expensesReducer = (
     state: ExpensesContextType,
@@ -15,11 +18,9 @@ const expensesReducer = (
 ): ExpensesContextType => {
     switch (action.type) {
         case STATE_VALUE.ADD_EXPENSE:
-            const id = new Date().toString() + Math.random().toString();
-            const newExpense: IExpense = { ...action.payload, id };
             return {
                 ...state,
-                expenses: [newExpense, ...state.expenses]
+                expenses: [...state.expenses, action.payload]
             };
         case STATE_VALUE.UPDATE_EXPENSE:
             const updatedExpenses = state.expenses.map((expense) =>
@@ -40,7 +41,12 @@ const expensesReducer = (
                 expenses: filteredExpenses
             };
         case STATE_VALUE.SET:
-            return { ...state, expenses: action.payload };
+            const inverted = action.payload.reverse();
+            return { ...state, expenses: inverted };
+        case STATE_VALUE.SET_LOADING:
+            return { ...state, isLoading: action.payload };
+        case STATE_VALUE.SET_ERROR:
+            return { ...state, error: action.payload };
         default:
             return state;
     }
@@ -49,31 +55,8 @@ const expensesReducer = (
 const ExpensesContextProvider = ({ children }: { children: ReactNode }) => {
     const [state, dispatch] = useReducer(expensesReducer, initialState);
 
-    const addExpense = (expense: IExpense) =>
-        dispatch({ type: STATE_VALUE.ADD_EXPENSE, payload: expense });
-
-    const updateExpense = (id: string, expense: IExpense) =>
-        dispatch({
-            type: STATE_VALUE.UPDATE_EXPENSE,
-            payload: { id, expense }
-        });
-
-    const deleteExpense = (id: string) =>
-        dispatch({ type: STATE_VALUE.DELETE_EXPENSE, payload: { id } });
-
-    const setExpenses = (expenses: IExpense[]) =>
-        dispatch({ type: STATE_VALUE.SET, payload: expenses });
-
-    const value: ExpensesContextType = {
-        expenses: state.expenses,
-        addExpense: addExpense,
-        updateExpense: updateExpense,
-        deleteExpense: deleteExpense,
-        setExpenses: setExpenses // Include setExpenses in the value object
-    };
-
     return (
-        <ExpensesContext.Provider value={value}>
+        <ExpensesContext.Provider value={{ state, dispatch }}>
             {children}
         </ExpensesContext.Provider>
     );
