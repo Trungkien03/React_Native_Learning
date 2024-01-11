@@ -8,6 +8,11 @@ import {
 } from 'react-native';
 import ExpenseForm from '../components/ManageExpense/ExpenseForm';
 import IconButton from '../components/UI/IconButton';
+import {
+    deleteExpese,
+    storeExpense,
+    updateExpenseService
+} from '../components/utils/Http';
 import { GlobalStyles } from '../constants/CommonConstant';
 import { ExpensesContext } from '../store/ExpensesContext';
 import {
@@ -15,11 +20,6 @@ import {
     RootStackParamList,
     STATE_VALUE
 } from '../types/CommonTypes';
-import {
-    deleteExpese,
-    storeExpense,
-    updateExpenseService
-} from '../components/utils/Http';
 
 interface ManageExpenseProps {
     route: RouteProp<RootStackParamList>;
@@ -41,11 +41,19 @@ const ManageExpense: FC<ManageExpenseProps> = ({ route, navigation }) => {
 
     const deleteExpenseHandler = async () => {
         dispatch({ type: STATE_VALUE.SET_LOADING, payload: true });
-        await deleteExpese(editedExpenseId || '');
-        dispatch({
-            type: STATE_VALUE.DELETE_EXPENSE,
-            payload: { id: editedExpenseId || '' }
-        });
+        try {
+            await deleteExpese(editedExpenseId || '');
+            dispatch({
+                type: STATE_VALUE.DELETE_EXPENSE,
+                payload: { id: editedExpenseId || '' }
+            });
+        } catch (error) {
+            dispatch({
+                type: STATE_VALUE.SET_ERROR,
+                payload: 'Could not delete expense'
+            });
+        }
+
         dispatch({ type: STATE_VALUE.SET_LOADING, payload: false });
         navigation.goBack();
     };
@@ -57,18 +65,31 @@ const ManageExpense: FC<ManageExpenseProps> = ({ route, navigation }) => {
     const confirmHandler = async (expenseData: IExpense) => {
         dispatch({ type: STATE_VALUE.SET_LOADING, payload: true });
         if (isEditing) {
-            await updateExpenseService(editedExpenseId, expenseData);
+            try {
+                await updateExpenseService(editedExpenseId, expenseData);
+            } catch (error) {
+                dispatch({
+                    type: STATE_VALUE.SET_ERROR,
+                    payload: 'Could not update expense'
+                });
+            }
             dispatch({
                 type: STATE_VALUE.UPDATE_EXPENSE,
                 payload: { id: editedExpenseId, expense: expenseData }
             });
         } else {
-            const id = await storeExpense(expenseData);
-
-            dispatch({
-                type: STATE_VALUE.ADD_EXPENSE,
-                payload: { ...expenseData, id }
-            });
+            try {
+                const id = await storeExpense(expenseData);
+                dispatch({
+                    type: STATE_VALUE.ADD_EXPENSE,
+                    payload: { ...expenseData, id }
+                });
+            } catch (error) {
+                dispatch({
+                    type: STATE_VALUE.SET_ERROR,
+                    payload: 'Could not delete expense'
+                });
+            }
         }
         dispatch({ type: STATE_VALUE.SET_LOADING, payload: false });
         navigation.goBack();
