@@ -1,0 +1,10 @@
+{
+  "extends": "@react-native/typescript-config/tsconfig.json",
+  "compilerOptions": {
+    "moduleResolution": "node",
+    "target": "esnext",
+    "module": "commonjs",
+    "jsx": "react-native"
+  },
+  "include": ["src/**/*.ts", "src/**/*.tsx"]
+}
