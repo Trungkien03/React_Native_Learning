@@ -6,8 +6,9 @@ import ImagePicker from "./ImagePicker";
 import LocationPicker from "./LocationPicker";
 import Button from "../UI/Button";
 import { LocationObject } from "expo-location";
+import { Place } from "../../models/place";
 
-const PlaceForm: FC<PlaceFormProps> = () => {
+const PlaceForm: FC<PlaceFormProps> = ({ onCreatePlace }) => {
   const [enteredTitle, setEnteredTitle] = useState("");
   const [pickedLocation, setPickedLocation] = useState<LocationObject>();
   const [selectedImage, setSelectedImage] = useState("");
@@ -23,9 +24,8 @@ const PlaceForm: FC<PlaceFormProps> = () => {
     setPickedLocation(location);
   }, []);
   const savePlaceHandler = () => {
-    console.log("enteredTitle", enteredTitle);
-    console.log("pickedLocation", pickedLocation);
-    console.log("selectedImage", selectedImage);
+    const placeData = new Place(enteredTitle, selectedImage, pickedLocation);
+    onCreatePlace(placeData);
   };
 
   return (

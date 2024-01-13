@@ -4,12 +4,20 @@ import { Place } from "../models/place";
 import { OpaqueColorValue } from "react-native";
 import { LatLng } from "react-native-maps";
 import { LocationObject } from "expo-location";
+import { NavigationProp, RouteProp } from "@react-navigation/native";
 
-export interface AddPlaceProps {}
+export interface AddPlaceProps {
+  navigation: NavigationProp<RootStackNavigator>;
+  route: RouteProp<RootStackNavigator, "AddPlace">;
+}
 
-export interface AllPlacesProps {}
-
-export interface PlaceFormProps {}
+export interface AllPlacesProps {
+  navigation: NavigationProp<RootStackNavigator>;
+  route: RouteProp<RootStackNavigator, "AllPlaces">;
+}
+export interface PlaceFormProps {
+  onCreatePlace: (item: Place) => void;
+}
 
 export interface PlacesListProps {
   places: Place[];
@@ -40,7 +48,7 @@ export interface IPlaceItemProps {
 }
 
 export type RootStackNavigator = {
-  AllPlaces: undefined;
+  AllPlaces: { place: Place };
   AddPlace?: { pickedLocation?: LatLng };
   Map: undefined;
 };
