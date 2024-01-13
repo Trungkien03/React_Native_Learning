@@ -1,14 +1,9 @@
 import React, { FC } from "react";
-import { Text, View } from "react-native";
+import PlacesList from "../components/Places/PlacesList";
+import { AllPlacesProps } from "../types/Place.types";
 
-interface AllPlacesProps {}
-
-const AllPlaces: FC<AllPlacesProps> = (props) => {
-  return (
-    <View>
-      <Text>AllPlaces</Text>
-    </View>
-  );
+const AllPlaces: FC<AllPlacesProps> = () => {
+  return <PlacesList places={[]} />;
 };
 
 export default AllPlaces;
