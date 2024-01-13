@@ -1,18 +1,26 @@
+import { useNavigation } from "@react-navigation/native";
 import {
+  LocationObject,
   PermissionStatus,
   getCurrentPositionAsync,
   useForegroundPermissions,
 } from "expo-location";
-import { FC } from "react";
-import { Alert, StyleSheet, View } from "react-native";
+import { FC, useState } from "react";
+import { Alert, Image, StyleSheet, Text, View } from "react-native";
 import { Colors } from "../../constants/Color";
+import { getMapPreview } from "../../utils/Location";
 import OutlineButton from "../UI/OutlineButton";
+import { NavigationProp } from "@react-navigation/native";
+import { RootStackNavigator } from "../../types/Place.types";
 
 interface LocationPickerProps {}
 
 const LocationPicker: FC<LocationPickerProps> = () => {
   const [locationPermissionInfo, requestPermission] =
     useForegroundPermissions();
+
+  const [pickedLocation, setPickedLocation] = useState<LocationObject>();
+  const navigation = useNavigation<NavigationProp<RootStackNavigator>>();
   const verifyPermission = async () => {
     if (locationPermissionInfo?.status === PermissionStatus.UNDETERMINED) {
       const permissionResponse = await requestPermission();
@@ -35,13 +43,31 @@ const LocationPicker: FC<LocationPickerProps> = () => {
       return;
     }
     const location = await getCurrentPositionAsync();
-    console.log(location);
+    setPickedLocation(location);
   };
-  const pickOnMapHandler = () => {};
+  const pickOnMapHandler = () => {
+    navigation.navigate("Map");
+  };
+
+  let locationPreview = <Text>No Location Yet</Text>;
+
+  if (pickedLocation?.coords) {
+    locationPreview = (
+      <Image
+        style={styles.image}
+        source={{
+          uri: getMapPreview(
+            pickedLocation?.coords.latitude,
+            pickedLocation?.coords.longitude
+          ),
+        }}
+      />
+    );
+  }
 
   return (
     <View>
-      <View style={styles.mapPreview}></View>
+      <View style={styles.mapPreview}>{locationPreview}</View>
       <View style={styles.actions}>
         <OutlineButton icon="location" onPress={getLocationHandler}>
           Locate User
@@ -68,6 +94,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
+  },
+  image: {
+    width: "100%",
+    height: "100%",
   },
 });
 

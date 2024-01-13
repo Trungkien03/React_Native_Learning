@@ -34,4 +34,5 @@ export interface IPlaceItemProps {
 export type RootStackNavigator = {
   AllPlaces: undefined;
   AddPlace: undefined;
+  Map: undefined;
 };
